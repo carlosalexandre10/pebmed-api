@@ -1,14 +1,15 @@
 module.exports = [
   {
-    name: 'gis',
-    type: 'postgres',
-    url: process.env.POSTGRES_DATABASE_URL_GIS,
-    entities: [process.env.POSTGRES_ENTITIES_GIS],
-  },
-  {
-    name: 'sansig',
-    type: 'postgres',
-    url: process.env.POSTGRES_DATABASE_URL_SANSIG,
-    entities: [process.env.POSTGRES_ENTITIES_SANSIG],
-  },
+    type: "postgres",
+    port: 5432,
+    host: "localhost",
+    username: "docker",
+    password: "123456",
+    database: "pebmed",
+    migrations: ["./src/shared/database/migrations/*.ts"],
+    entities: ["./src/modules/**/entities/*.ts"],
+    cli: {
+      migrationsDir: "./src/shared/database/migrations"
+    }
+  }
 ]
