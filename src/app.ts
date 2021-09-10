@@ -41,19 +41,19 @@ app.use(
 );
 
 // KEYCLOAK
-const memoryStore = new session.MemoryStore();
-const keycloak = new Keycloak({ store: memoryStore });
-app.use(
-  session({
-    secret: 'thisShouldBeLongAndSecret',
-    resave: false,
-    saveUninitialized: true,
-    store: memoryStore,
-  }),
-);
-app.use(keycloak.middleware());
-app.use(keycloak.middleware({ logout: '/' }));
-app.use(keycloak.protect());
+// const memoryStore = new session.MemoryStore();
+// const keycloak = new Keycloak({ store: memoryStore });
+// app.use(
+//   session({
+//     secret: 'thisShouldBeLongAndSecret',
+//     resave: false,
+//     saveUninitialized: true,
+//     store: memoryStore,
+//   }),
+// );
+// app.use(keycloak.middleware());
+// app.use(keycloak.middleware({ logout: '/' }));
+// app.use(keycloak.protect());
 
 // ROUTES
 app.use(routes);

@@ -12,7 +12,14 @@ class MedicoRepository implements IMedicoRepository {
     this.repository = getRepository(Medico);
   }
 
-  async incluir({ nome, crm }: IMedicoDTO): Promise<Medico> {
+  criar({ nome, crm }: IMedicoDTO): Medico {
+    return this.repository.create({
+      nome,
+      crm,
+    });
+  }
+
+  async incluir({ nome, crm }: Medico): Promise<Medico> {
     const medico = this.repository.create({
       nome,
       crm,

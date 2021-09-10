@@ -4,6 +4,7 @@ import IMedicoDTO from '@modules/prontomed/dtos/IMedicoDTO';
 import Medico from '@modules/prontomed/entities/Medico';
 import IMedicoRepository from '@modules/prontomed/repositories/IMedicoRepository';
 import AppError from '@shared/errors/AppError';
+import validarCampos from '@shared/errors/ValidaCampos';
 
 @injectable()
 class IncluiMedicoService {
@@ -13,20 +14,11 @@ class IncluiMedicoService {
   ) {}
 
   async execute({ nome, crm }: IMedicoDTO): Promise<Medico> {
-    if (!nome) {
-      throw new AppError('Nome do Médico é obrigatório.');
-    }
+    const novoMedico = this.medicoRepository.criar({ nome, crm });
+    const error = await validarCampos(novoMedico);
 
-    if (typeof nome !== 'string') {
-      throw new AppError('Nome do Médico deve ser uma string.');
-    }
-
-    if (!crm) {
-      throw new AppError('CRM do Médico é obrigatório.');
-    }
-
-    if (typeof crm !== 'number') {
-      throw new AppError('CRM do Médico deve ser um number.');
+    if (error) {
+      throw new AppError(error);
     }
 
     const medicoExiste = await this.medicoRepository.findByCRM(crm);
@@ -35,7 +27,7 @@ class IncluiMedicoService {
       throw new AppError('Médico já está cadastrado.');
     }
 
-    const medico = await this.medicoRepository.incluir({ nome, crm });
+    const medico = await this.medicoRepository.incluir(novoMedico);
 
     return medico;
   }
