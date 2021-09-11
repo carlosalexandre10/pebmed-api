@@ -1,11 +1,11 @@
 import { inject, injectable } from 'tsyringe';
-import validator from 'validator';
 
 import { IIncluiConsultaDTO } from '@modules/prontomed/dtos/IConsultaDTO';
 import Consulta from '@modules/prontomed/entities/Consulta';
 import IConsultaRepository from '@modules/prontomed/repositories/IConsultaRepository';
 import IPacienteRepository from '@modules/prontomed/repositories/IPacienteRepository';
 import AppError from '@shared/errors/AppError';
+import validarCampos from '@shared/errors/ValidaCampos';
 
 @injectable()
 class IncluiConsultaService {
@@ -21,30 +21,15 @@ class IncluiConsultaService {
     data,
     anotacao,
   }: IIncluiConsultaDTO): Promise<Consulta> {
-    if (!paciente_id) {
-      throw new AppError('ID do Paciente é obrigatório.');
-    }
+    const novaConsulta = this.consultaRepository.criar({
+      paciente_id,
+      data,
+      anotacao,
+    });
+    const error = await validarCampos(novaConsulta);
 
-    if (typeof paciente_id !== 'string') {
-      throw new AppError('ID do Paciente deve ser uma string.');
-    }
-
-    if (!data) {
-      throw new AppError('Data da Consulta é obrigatório.');
-    }
-
-    if (!validator.isDate(data.toString())) {
-      throw new AppError(
-        'Data da Consulta deve ser uma data no formato yyyy-MM-dd.',
-      );
-    }
-
-    if (!anotacao) {
-      throw new AppError('Anotação da Consulta é obrigatório.');
-    }
-
-    if (typeof anotacao !== 'string') {
-      throw new AppError('Anotação da Consulta deve ser uma string.');
+    if (error) {
+      throw new AppError(error);
     }
 
     const pacienteExiste = await this.pacienteRepository.findById(paciente_id);
@@ -53,13 +38,9 @@ class IncluiConsultaService {
       throw new AppError('Paciente não existe.');
     }
 
-    const consulta = await this.consultaRepository.incluir({
-      paciente_id,
-      data,
-      anotacao,
-    });
+    await this.consultaRepository.incluir(novaConsulta);
 
-    return consulta;
+    return novaConsulta;
   }
 }
 

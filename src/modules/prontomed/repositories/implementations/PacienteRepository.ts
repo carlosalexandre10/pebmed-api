@@ -12,7 +12,7 @@ class PacienteRepository implements IPacienteRepository {
     this.repository = getRepository(Paciente);
   }
 
-  async incluir({
+  criar({
     medico_id,
     nome,
     telefone,
@@ -21,8 +21,8 @@ class PacienteRepository implements IPacienteRepository {
     sexo,
     altura,
     peso,
-  }: IIncluiPacienteDTO): Promise<Paciente> {
-    const paciente = this.repository.create({
+  }: IIncluiPacienteDTO): Paciente {
+    return this.repository.create({
       medico_id,
       nome,
       telefone,
@@ -32,10 +32,10 @@ class PacienteRepository implements IPacienteRepository {
       altura,
       peso,
     });
+  }
 
+  async incluir(paciente: Paciente): Promise<void> {
     await this.repository.save(paciente);
-
-    return paciente;
   }
 
   async listar(): Promise<Paciente[]> {
@@ -44,10 +44,8 @@ class PacienteRepository implements IPacienteRepository {
     return pacientes;
   }
 
-  async alterar(paciente: Paciente): Promise<Paciente> {
+  async alterar(paciente: Paciente): Promise<void> {
     await this.repository.save(paciente);
-
-    return paciente;
   }
 
   async findById(id: string): Promise<Paciente | null> {

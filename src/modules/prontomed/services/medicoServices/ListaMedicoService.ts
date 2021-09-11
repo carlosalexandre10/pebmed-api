@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
-import Medico from '@modules/prontomed/entities/Medico';
+import { IListaMedicoDTO } from '@modules/prontomed/dtos/IMedicoDTO';
 import IMedicoRepository from '@modules/prontomed/repositories/IMedicoRepository';
 
 @injectable()
@@ -10,7 +10,7 @@ class ListaMedicoService {
     private medicoRepository: IMedicoRepository,
   ) {}
 
-  async execute(): Promise<Medico[]> {
+  async execute(): Promise<IListaMedicoDTO[]> {
     const medicos = await this.medicoRepository.listar();
 
     return medicos;

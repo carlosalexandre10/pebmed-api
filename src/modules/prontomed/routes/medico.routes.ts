@@ -55,6 +55,10 @@ const medicoRouter = Router();
  *                  type: number
  *                  description: CRM do Médico.
  *                  example: 9999
+ *                senha:
+ *                  type: string
+ *                  description: Senha do Médico.
+ *                  example: CÇndqwew12212
  *     responses:
  *       201:
  *         description: Médico criado

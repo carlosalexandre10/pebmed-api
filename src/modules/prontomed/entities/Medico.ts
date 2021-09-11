@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsPositive, IsString, MaxLength } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsPositive,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -21,9 +27,20 @@ class Medico {
   nome: string;
 
   @Column()
+  @IsInt({
+    message: 'CRM do Médico deve ser um inteiro positivo',
+  })
   @IsPositive({ message: 'CRM do Médico deve ser um número positivo' })
   @IsNotEmpty({ message: 'CRM do Médico é obrigatório' })
   crm: number;
+
+  @Column()
+  @MaxLength(20, {
+    message: 'Senha do Médico deve ter no máximo 20 caracteres',
+  })
+  @IsString({ message: 'Senha do Médico deve ser uma string' })
+  @IsNotEmpty({ message: 'Senha do Médico é obrigatório' })
+  senha: string;
 
   @Column(CreateDateColumn)
   created_at: Date;

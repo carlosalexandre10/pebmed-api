@@ -1,9 +1,7 @@
 import { validate } from 'class-validator';
 
-export default async function validarCampos(
-  entity: Record<string, unknown>,
-): Promise<string> {
-  const errors = await validate(entity);
+export default async function validarCampos(entity: object): Promise<string> {
+  const errors = await validate(entity, { skipMissingProperties: true });
 
   if (errors.length > 0 && errors[0].constraints) {
     for (const message of Object.keys(errors[0].constraints)) {

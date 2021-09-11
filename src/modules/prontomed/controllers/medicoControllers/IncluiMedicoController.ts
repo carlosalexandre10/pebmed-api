@@ -5,11 +5,11 @@ import IncluiMedicoService from '@modules/prontomed/services/medicoServices/Incl
 
 class IncluiMedicoController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { nome, crm } = request.body;
+    const { nome, crm, senha } = request.body;
 
     const incluiMedicoService = container.resolve(IncluiMedicoService);
 
-    const medico = await incluiMedicoService.execute({ nome, crm });
+    const medico = await incluiMedicoService.execute({ nome, crm, senha });
 
     return response.status(201).json(medico);
   }

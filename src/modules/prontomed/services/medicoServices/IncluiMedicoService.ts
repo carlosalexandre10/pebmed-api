@@ -1,7 +1,10 @@
+import { hash } from 'bcryptjs';
 import { inject, injectable } from 'tsyringe';
 
-import IMedicoDTO from '@modules/prontomed/dtos/IMedicoDTO';
-import Medico from '@modules/prontomed/entities/Medico';
+import {
+  IIncluiMedicoDTO,
+  IListaMedicoDTO,
+} from '@modules/prontomed/dtos/IMedicoDTO';
 import IMedicoRepository from '@modules/prontomed/repositories/IMedicoRepository';
 import AppError from '@shared/errors/AppError';
 import validarCampos from '@shared/errors/ValidaCampos';
@@ -13,8 +16,12 @@ class IncluiMedicoService {
     private medicoRepository: IMedicoRepository,
   ) {}
 
-  async execute({ nome, crm }: IMedicoDTO): Promise<Medico> {
-    const novoMedico = this.medicoRepository.criar({ nome, crm });
+  async execute({
+    nome,
+    crm,
+    senha,
+  }: IIncluiMedicoDTO): Promise<IListaMedicoDTO> {
+    const novoMedico = this.medicoRepository.criar({ nome, crm, senha });
     const error = await validarCampos(novoMedico);
 
     if (error) {
@@ -27,7 +34,15 @@ class IncluiMedicoService {
       throw new AppError('Médico já está cadastrado.');
     }
 
-    const medico = await this.medicoRepository.incluir(novoMedico);
+    novoMedico.senha = await hash(senha, 8);
+
+    await this.medicoRepository.incluir(novoMedico);
+
+    const medico: IListaMedicoDTO = {
+      id: novoMedico.id,
+      nome: novoMedico.nome,
+      crm: novoMedico.crm,
+    };
 
     return medico;
   }

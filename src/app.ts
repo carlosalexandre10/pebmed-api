@@ -1,8 +1,6 @@
 import 'reflect-metadata';
 import cors from 'cors';
 import express, { Request, Response, NextFunction } from 'express';
-import session from 'express-session';
-import Keycloak from 'keycloak-connect';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 

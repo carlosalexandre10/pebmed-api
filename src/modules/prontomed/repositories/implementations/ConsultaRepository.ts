@@ -12,20 +12,16 @@ class ConsultaRepository implements IConsultaRepository {
     this.repository = getRepository(Consulta);
   }
 
-  async incluir({
-    paciente_id,
-    data,
-    anotacao,
-  }: IIncluiConsultaDTO): Promise<Consulta> {
-    const consulta = this.repository.create({
+  criar({ paciente_id, data, anotacao }: IIncluiConsultaDTO): Consulta {
+    return this.repository.create({
       paciente_id,
       data,
       anotacao,
     });
+  }
 
+  async incluir(consulta: Consulta): Promise<void> {
     await this.repository.save(consulta);
-
-    return consulta;
   }
 
   async incluirAnotacao(consulta: Consulta): Promise<Consulta> {

@@ -4,6 +4,7 @@ import { IIncluiAnotacaoConsultaDTO } from '@modules/prontomed/dtos/IConsultaDTO
 import Consulta from '@modules/prontomed/entities/Consulta';
 import IConsultaRepository from '@modules/prontomed/repositories/IConsultaRepository';
 import AppError from '@shared/errors/AppError';
+import validarCampos from '@shared/errors/ValidaCampos';
 
 @injectable()
 class IncluiAnotacaoConsultaService {
@@ -16,20 +17,15 @@ class IncluiAnotacaoConsultaService {
     id,
     anotacao,
   }: IIncluiAnotacaoConsultaDTO): Promise<Consulta> {
-    if (!id) {
-      throw new AppError('ID da Consulta é obrigatório.');
-    }
+    const consulta = new Consulta();
+    Object.assign(consulta, {
+      id,
+      anotacao,
+    });
+    const error = await validarCampos(consulta);
 
-    if (typeof id !== 'string') {
-      throw new AppError('ID da Consulta deve ser uma string.');
-    }
-
-    if (!anotacao) {
-      throw new AppError('Anotação da Consulta é obrigatório.');
-    }
-
-    if (typeof anotacao !== 'string') {
-      throw new AppError('Anotação da Consulta deve ser uma string.');
+    if (error) {
+      throw new AppError(error);
     }
 
     const consultaExiste = await this.consultaRepository.findById(id);
@@ -43,11 +39,10 @@ class IncluiAnotacaoConsultaService {
       anotacao,
     });
 
-    const consulta = await this.consultaRepository.incluirAnotacao(
-      consultaExiste,
-    );
+    const anotacaoDaConsultaAlterada =
+      await this.consultaRepository.incluirAnotacao(consultaExiste);
 
-    return consulta;
+    return anotacaoDaConsultaAlterada;
   }
 }
 
