@@ -12,18 +12,15 @@ class AgendamentoRepository implements IAgendamentoRepository {
     this.repository = getRepository(Agendamento);
   }
 
-  async incluir({
-    paciente_id,
-    data,
-  }: IIncluiAgendamentoDTO): Promise<Agendamento> {
-    const agendamento = this.repository.create({
+  criar({ paciente_id, data }: IIncluiAgendamentoDTO): Agendamento {
+    return this.repository.create({
       paciente_id,
       data,
     });
+  }
 
+  async incluir(agendamento: Agendamento): Promise<void> {
     await this.repository.save(agendamento);
-
-    return agendamento;
   }
 
   async listar(): Promise<Agendamento[]> {
@@ -32,10 +29,8 @@ class AgendamentoRepository implements IAgendamentoRepository {
     return agendamentos;
   }
 
-  async alterar(agendamento: Agendamento): Promise<Agendamento> {
+  async alterar(agendamento: Agendamento): Promise<void> {
     await this.repository.save(agendamento);
-
-    return agendamento;
   }
 
   async excluir(agendamento: Agendamento): Promise<void> {

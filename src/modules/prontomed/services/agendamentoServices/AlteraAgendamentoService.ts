@@ -1,11 +1,11 @@
 import { inject, injectable } from 'tsyringe';
-import validator from 'validator';
 
 import { IAlteraAgendamentoDTO } from '@modules/prontomed/dtos/IAgendamentoDTO';
 import Agendamento from '@modules/prontomed/entities/Agendamento';
 import IAgendamentoRepository from '@modules/prontomed/repositories/IAgendamentoRepository';
 import IPacienteRepository from '@modules/prontomed/repositories/IPacienteRepository';
 import AppError from '@shared/errors/AppError';
+import validarCampos from '@shared/errors/ValidaCampos';
 
 @injectable()
 class AlteraAgendamentoService {
@@ -21,30 +21,16 @@ class AlteraAgendamentoService {
     paciente_id,
     data,
   }: IAlteraAgendamentoDTO): Promise<Agendamento> {
-    if (!id) {
-      throw new AppError('ID do Agendamento é obrigatório.');
-    }
+    const agendamento = new Agendamento();
+    Object.assign(agendamento, {
+      id,
+      paciente_id,
+      data,
+    });
+    const error = await validarCampos(agendamento);
 
-    if (typeof id !== 'string') {
-      throw new AppError('ID do Agendamento deve ser uma string.');
-    }
-
-    if (!paciente_id) {
-      throw new AppError('ID do Paciente é obrigatório.');
-    }
-
-    if (typeof paciente_id !== 'string') {
-      throw new AppError('ID do Paciente deve ser uma string.');
-    }
-
-    if (!data) {
-      throw new AppError('Data do Agendamento é obrigatório.');
-    }
-
-    if (!validator.isDate(data.toString())) {
-      throw new AppError(
-        'Data do Agendamento deve ser uma data no formato yyyy-MM-dd.',
-      );
+    if (error) {
+      throw new AppError(error);
     }
 
     const pacienteExiste = await this.pacienteRepository.findById(paciente_id);
@@ -72,11 +58,9 @@ class AlteraAgendamentoService {
       data,
     });
 
-    const agendamento = await this.agendamentoRepository.alterar(
-      agendamentoExiste,
-    );
+    await this.agendamentoRepository.alterar(agendamentoExiste);
 
-    return agendamento;
+    return agendamentoExiste;
   }
 }
 

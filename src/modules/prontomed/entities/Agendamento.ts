@@ -1,4 +1,11 @@
 import {
+  IsDateString,
+  IsNotEmpty,
+  IsUUID,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
+import {
   Column,
   CreateDateColumn,
   Entity,
@@ -13,9 +20,14 @@ import Paciente from './Paciente';
 @Entity('agendamento')
 class Agendamento {
   @PrimaryGeneratedColumn('uuid')
+  @IsUUID(4, { message: 'Id do Agendamento deve ser um UUID válido' })
   id: string;
 
   @Column()
+  @IsUUID(4, {
+    message: 'Id do Paciente do Agendamento deve ser um UUID válido',
+  })
+  @IsNotEmpty({ message: 'Id do Paciente do Agendamento é obrigatório' })
   paciente_id: string;
 
   @ManyToOne(() => Paciente)
@@ -23,6 +35,19 @@ class Agendamento {
   paciente: Paciente;
 
   @Column()
+  @MinLength(10, {
+    message: 'Data da Consulta deve ser uma Date no formato yyyy-MM-dd',
+  })
+  @MaxLength(10, {
+    message: 'Data da Consulta deve ser uma Date no formato yyyy-MM-dd',
+  })
+  @IsDateString(
+    { strict: true },
+    {
+      message: 'Data da Consulta deve ser uma Date no formato yyyy-MM-dd',
+    },
+  )
+  @IsNotEmpty({ message: 'Data da Consulta é obrigatório' })
   data: Date;
 
   @Column(CreateDateColumn)

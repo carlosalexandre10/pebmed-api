@@ -1,7 +1,9 @@
 import { inject, injectable } from 'tsyringe';
 
+import Agendamento from '@modules/prontomed/entities/Agendamento';
 import IAgendamentoRepository from '@modules/prontomed/repositories/IAgendamentoRepository';
 import AppError from '@shared/errors/AppError';
+import validarCampos from '@shared/errors/ValidaCampos';
 
 @injectable()
 class ExcluiAgendamentoService {
@@ -11,12 +13,14 @@ class ExcluiAgendamentoService {
   ) {}
 
   async execute(id: string): Promise<void> {
-    if (!id) {
-      throw new AppError('ID do Agendamento é obrigatório.');
-    }
+    const agendamento = new Agendamento();
+    Object.assign(agendamento, {
+      id,
+    });
+    const error = await validarCampos(agendamento);
 
-    if (typeof id !== 'string') {
-      throw new AppError('ID do Agendamento deve ser uma string.');
+    if (error) {
+      throw new AppError(error);
     }
 
     const agendamentoExiste = await this.agendamentoRepository.findById(id);

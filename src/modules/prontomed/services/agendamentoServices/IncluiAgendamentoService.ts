@@ -1,11 +1,11 @@
 import { inject, injectable } from 'tsyringe';
-import validator from 'validator';
 
 import { IIncluiAgendamentoDTO } from '@modules/prontomed/dtos/IAgendamentoDTO';
 import Agendamento from '@modules/prontomed/entities/Agendamento';
 import IAgendamentoRepository from '@modules/prontomed/repositories/IAgendamentoRepository';
 import IPacienteRepository from '@modules/prontomed/repositories/IPacienteRepository';
 import AppError from '@shared/errors/AppError';
+import validarCampos from '@shared/errors/ValidaCampos';
 
 @injectable()
 class IncluiAgendamentoService {
@@ -20,22 +20,14 @@ class IncluiAgendamentoService {
     paciente_id,
     data,
   }: IIncluiAgendamentoDTO): Promise<Agendamento> {
-    if (!paciente_id) {
-      throw new AppError('ID do Paciente é obrigatório.');
-    }
+    const novoAgendamento = this.agendamentoRepository.criar({
+      paciente_id,
+      data,
+    });
+    const error = await validarCampos(novoAgendamento);
 
-    if (typeof paciente_id !== 'string') {
-      throw new AppError('ID do Paciente deve ser uma string.');
-    }
-
-    if (!data) {
-      throw new AppError('Data do Agendamento é obrigatório.');
-    }
-
-    if (!validator.isDate(data.toString())) {
-      throw new AppError(
-        'Data do Agendamento deve ser uma data no formato yyyy-MM-dd.',
-      );
+    if (error) {
+      throw new AppError(error);
     }
 
     const agendamentoJaPossuiPaciente =
@@ -51,12 +43,9 @@ class IncluiAgendamentoService {
       throw new AppError('Paciente não existe.');
     }
 
-    const agendamento = await this.agendamentoRepository.incluir({
-      paciente_id,
-      data,
-    });
+    await this.agendamentoRepository.incluir(novoAgendamento);
 
-    return agendamento;
+    return novoAgendamento;
   }
 }
 
