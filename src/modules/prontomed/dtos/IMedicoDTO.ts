@@ -9,3 +9,8 @@ export interface IListaMedicoDTO {
   nome: string;
   crm: number;
 }
+
+export interface IAutenticaMedicoDTO {
+  crm: number;
+  senha: string;
+}

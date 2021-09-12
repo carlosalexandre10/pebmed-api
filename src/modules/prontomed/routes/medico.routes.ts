@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import IncluiMedicoController from '../controllers/medicoControllers/IncluiMedicoController';
 import ListaMedicoController from '../controllers/medicoControllers/ListaMedicoController';
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const medicoRouter = Router();
 
@@ -88,6 +89,6 @@ medicoRouter.post('/', incluiMedicoController.handle);
  *                  $ref: '#/components/schemas/Medico'
  */
 const listaMedicoController = new ListaMedicoController();
-medicoRouter.get('/', listaMedicoController.handle);
+medicoRouter.get('/', ensureAuthenticated, listaMedicoController.handle);
 
 export default medicoRouter;

@@ -4,8 +4,10 @@ import AlteraAgendamentoController from '../controllers/agendamentoControllers/A
 import ExcluiAgendamentoController from '../controllers/agendamentoControllers/ExcluiAgendamentoController';
 import IncluiAgendamentoController from '../controllers/agendamentoControllers/IncluiAgendamentoController';
 import ListaAgendamentoController from '../controllers/agendamentoControllers/ListaAgendamentoController';
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const agendamentoRouter = Router();
+agendamentoRouter.use(ensureAuthenticated);
 
 /**
  * @swagger
