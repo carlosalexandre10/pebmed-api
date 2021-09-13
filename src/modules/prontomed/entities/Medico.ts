@@ -42,6 +42,9 @@ class Medico {
   @IsNotEmpty({ message: 'Senha do Médico é obrigatório' })
   senha: string;
 
+  @Column()
+  isAdmin: boolean;
+
   @Column(CreateDateColumn)
   created_at: Date;
 

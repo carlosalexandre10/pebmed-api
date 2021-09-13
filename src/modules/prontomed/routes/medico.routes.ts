@@ -1,10 +1,13 @@
 import { Router } from 'express';
 
+import { ensureAdmin } from '@shared/middlewares/ensureAdmin';
+import ensureAuthenticated from '@shared/middlewares/ensureAuthenticated';
+
 import IncluiMedicoController from '../controllers/medicoControllers/IncluiMedicoController';
 import ListaMedicoController from '../controllers/medicoControllers/ListaMedicoController';
-import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const medicoRouter = Router();
+medicoRouter.use(ensureAuthenticated);
 
 /**
  * @swagger
@@ -69,7 +72,7 @@ const medicoRouter = Router();
  *               $ref: '#/components/schemas/Medico'
  */
 const incluiMedicoController = new IncluiMedicoController();
-medicoRouter.post('/', incluiMedicoController.handle);
+medicoRouter.post('/', ensureAdmin, incluiMedicoController.handle);
 
 /**
  * @swagger
@@ -89,6 +92,6 @@ medicoRouter.post('/', incluiMedicoController.handle);
  *                  $ref: '#/components/schemas/Medico'
  */
 const listaMedicoController = new ListaMedicoController();
-medicoRouter.get('/', ensureAuthenticated, listaMedicoController.handle);
+medicoRouter.get('/', listaMedicoController.handle);
 
 export default medicoRouter;

@@ -1,10 +1,11 @@
 import { Router } from 'express';
 
+import ensureAuthenticated from '@shared/middlewares/ensureAuthenticated';
+
 import AlteraAgendamentoController from '../controllers/agendamentoControllers/AlteraAgendamentoController';
 import ExcluiAgendamentoController from '../controllers/agendamentoControllers/ExcluiAgendamentoController';
 import IncluiAgendamentoController from '../controllers/agendamentoControllers/IncluiAgendamentoController';
 import ListaAgendamentoController from '../controllers/agendamentoControllers/ListaAgendamentoController';
-import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const agendamentoRouter = Router();
 agendamentoRouter.use(ensureAuthenticated);

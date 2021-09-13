@@ -2,9 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 
 import authConfig from '@config/auth';
+import MedicoRepository from '@modules/prontomed/repositories/implementations/MedicoRepository';
 import AppError from '@shared/errors/AppError';
-
-import MedicoRepository from '../repositories/implementations/MedicoRepository';
 
 interface ITokenPayload {
   iat: number;

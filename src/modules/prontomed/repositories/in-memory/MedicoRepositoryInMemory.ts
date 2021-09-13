@@ -1,24 +1,28 @@
 import { v4 } from 'uuid';
 
-import IMedicoDTO from '../../dtos/IMedicoDTO';
+import { IIncluiMedicoDTO } from '@modules/prontomed/dtos/IMedicoDTO';
+
 import Medico from '../../entities/Medico';
 import IMedicoRepository from '../IMedicoRepository';
 
 class MedicoRepositoryInMemory implements IMedicoRepository {
   medicos: Medico[] = [];
 
-  async incluir({ nome, crm }: IMedicoDTO): Promise<Medico> {
+  criar({ nome, crm, senha }: IIncluiMedicoDTO): Medico {
     const medico = new Medico();
 
     Object.assign(medico, {
       id: v4(),
       nome,
       crm,
+      senha,
     });
 
-    this.medicos.push(medico);
-
     return medico;
+  }
+
+  async incluir(medico: Medico): Promise<void> {
+    this.medicos.push(medico);
   }
 
   async listar(): Promise<Medico[]> {

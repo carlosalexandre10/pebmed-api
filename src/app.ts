@@ -4,13 +4,15 @@ import express, { Request, Response, NextFunction } from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
+import createConnection from '@shared/database';
+
 import 'express-async-errors';
 import AppError from '@shared/errors/AppError';
 import routes from '@shared/routes';
 
-import '@shared/database';
 import '@shared/container';
 
+createConnection();
 const app = express();
 
 app.use(express.json());

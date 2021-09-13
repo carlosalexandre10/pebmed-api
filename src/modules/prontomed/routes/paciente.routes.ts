@@ -1,9 +1,10 @@
 import { Router } from 'express';
 
+import ensureAuthenticated from '@shared/middlewares/ensureAuthenticated';
+
 import AlteraPacienteController from '../controllers/pacienteControllers/AlteraPacienteController';
 import IncluiPacienteController from '../controllers/pacienteControllers/IncluiPacienteController';
 import ListaPacienteController from '../controllers/pacienteControllers/ListaPacienteController';
-import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const pacienteRouter = Router();
 pacienteRouter.use(ensureAuthenticated);

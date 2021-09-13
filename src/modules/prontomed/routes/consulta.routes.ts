@@ -1,9 +1,10 @@
 import { Router } from 'express';
 
+import ensureAuthenticated from '@shared/middlewares/ensureAuthenticated';
+
 import IncluiAnotacaoConsultaController from '../controllers/consultaControllers/IncluiAnotacaoConsultaController';
 import IncluiConsultaController from '../controllers/consultaControllers/IncluiConsultaController';
 import ListaConsultaController from '../controllers/consultaControllers/ListaConsultaController';
-import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const consultaRouter = Router();
 consultaRouter.use(ensureAuthenticated);

@@ -15,6 +15,7 @@ describe('Incluir Medico', () => {
     const medico = await incluiMedicoService.execute({
       nome: 'Carlos Alexandre',
       crm: 99999,
+      senha: 'CÇndqwew12212',
     });
 
     const medicoCriado = await medicoRepositoryInMemory.findByCRM(medico.crm);
@@ -27,16 +28,19 @@ describe('Incluir Medico', () => {
       const medico = {
         nome: 'Carlos Alexandre',
         crm: 99999,
+        senha: 'CÇndqwew12212',
       };
 
       await incluiMedicoService.execute({
         nome: medico.nome,
         crm: medico.crm,
+        senha: medico.senha,
       });
 
       await incluiMedicoService.execute({
         nome: medico.nome,
         crm: medico.crm,
+        senha: medico.senha,
       });
     }).rejects.toBeInstanceOf(AppError);
   });
