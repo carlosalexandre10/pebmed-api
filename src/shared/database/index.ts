@@ -5,7 +5,11 @@ export default async (host = 'postgres'): Promise<Connection> => {
 
   return createConnection(
     Object.assign(defaultOptions, {
-      host,
+      host: process.env.NODE_ENV === 'test' ? 'localhost' : host,
+      database:
+        process.env.NODE_ENV === 'test'
+          ? 'pebmed_test'
+          : defaultOptions.database,
     }),
   );
 };

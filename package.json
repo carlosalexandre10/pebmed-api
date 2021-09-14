@@ -8,7 +8,7 @@
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/server.ts",
     "start": "ts-node node dist/server.js",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "test": "jest",
+    "test": "NODE_ENV=test jest",
     "seed:admin": "ts-node-dev src/shared/database/seed/admin.ts"
   },
   "dependencies": {
